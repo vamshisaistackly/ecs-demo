@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_REGION = 'us-east-1'
-        ECR_REPO = 'ecs-demo'
-        ACCOUNT_ID = '412664885682'
-    }
-
     stages {
 
         stage('Build Docker Image') {
@@ -18,28 +12,21 @@ pipeline {
         stage('Login ECR') {
             steps {
                 sh '''
-                aws ecr get-login-password --region $AWS_REGION | \
-                docker login --username AWS --password-stdin \
-                $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+                aws ecr get-login-password --region us-east-1 | \
+                docker login --username AWS --password-stdin 412664885682.dkr.ecr.us-east-1.amazonaws.com
                 '''
             }
         }
 
         stage('Tag Image') {
             steps {
-                sh '''
-                docker tag ecs-demo:latest \
-                $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/ecs-demo:latest
-                '''
+                sh 'docker tag ecs-demo:latest 412664885682.dkr.ecr.us-east-1.amazonaws.com/ecs-demo:latest'
             }
         }
 
         stage('Push Image') {
             steps {
-                sh '''
-                docker push \
-                $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/ecs-demo:latest
-                '''
+                sh 'docker push 412664885682.dkr.ecr.us-east-1.amazonaws.com/ecs-demo:latest'
             }
         }
 
@@ -47,8 +34,8 @@ pipeline {
             steps {
                 sh '''
                 aws ecs update-service \
-                --cluster ecs-demo-cluster \
-                --service ecs-demo-task-service-90sgcgdp \
+                --cluster my-first-cluster \
+                --service ecs-demo-service \
                 --force-new-deployment
                 '''
             }
