@@ -25,7 +25,7 @@ pipeline {
                     docker push 412664885682.dkr.ecr.us-east-1.amazonaws.com/ecs-demo:latest
 
                     aws ecs update-service \
-                    --cluster my-first-cluster \
+                    --cluster ecs-demo-cluster \
                     --service ecs-service \
                     --force-new-deployment
                     '''
