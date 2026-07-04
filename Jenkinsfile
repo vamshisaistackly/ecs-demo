@@ -26,7 +26,7 @@ pipeline {
 
                     aws ecs update-service \
                     --cluster my-first-cluster \
-                    --service ecs-demo-service \
+                    --service ecs-demo-task-service-90sgcgdp \
                     --force-new-deployment
                     '''
                 }
